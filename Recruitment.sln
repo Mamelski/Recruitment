@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recruitment.API", "Recruitm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recruitment.Functions", "Recruitment.Functions\Recruitment.Functions.csproj", "{9DBE26B1-E7B6-49CD-81B2-EBEEBC5D03CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recruitment.Contracts", "Recruitment.Contracts\Recruitment.Contracts.csproj", "{5BB22BF1-87E6-4712-AE12-F56F072FFC66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9DBE26B1-E7B6-49CD-81B2-EBEEBC5D03CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DBE26B1-E7B6-49CD-81B2-EBEEBC5D03CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DBE26B1-E7B6-49CD-81B2-EBEEBC5D03CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BB22BF1-87E6-4712-AE12-F56F072FFC66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BB22BF1-87E6-4712-AE12-F56F072FFC66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BB22BF1-87E6-4712-AE12-F56F072FFC66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BB22BF1-87E6-4712-AE12-F56F072FFC66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
