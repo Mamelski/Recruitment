@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Recruitment.Contracts;
@@ -17,31 +16,52 @@ namespace Recruitment.Functions
     {
         [FunctionName("HashCalculator")]
         public static async Task<IActionResult> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
-            HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "post")]
+            HttpRequest request, ILogger log)
         {
-            var content = await new StreamReader(req.Body).ReadToEndAsync();
-            var credentials = JsonConvert.DeserializeObject<Credentials>(content);
+            var credentials = await ParseInputCredentials(request);
+
+            if (!ValidateCredentials(credentials))
+            {
+                // 422 - may be something different
+                return new UnprocessableEntityObjectResult("Login and password in body cannot be null or whitespace.");
+            }
             
             var input = credentials.Login + credentials.Password;
+            var hash = CalculateMd5Hash(input);
 
-            string res;
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-            {
-                var inputBytes = Encoding.ASCII.GetBytes(input);
-                var hashBytes = md5.ComputeHash(inputBytes);
+            return new OkObjectResult(hash);
+        }
+
+        private static async Task<Credentials> ParseInputCredentials(HttpRequest request)
+        {
+            var content = await new StreamReader(request.Body).ReadToEndAsync();
+            var credentials = JsonConvert.DeserializeObject<Credentials>(content);
+
+            return credentials;
+        }
+        
+        // Here instead of returning bool maybe we can use exceptions and then filters
+        // with some logic common for other functions
+        private static bool ValidateCredentials(Credentials credentials)
+        {
+            return !string.IsNullOrWhiteSpace(credentials?.Login) 
+                   && !string.IsNullOrWhiteSpace(credentials.Password);
+        }
+
+        private static string CalculateMd5Hash(string input)
+        {
+            using var md5 = MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var hashBytes = md5.ComputeHash(inputBytes);
                 
-                var sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("X2"));
-                }
-
-                res = sb.ToString();
+            var sb = new StringBuilder();
+            foreach (var t in hashBytes)
+            {
+                sb.Append(t.ToString("X2"));
             }
 
-            return new OkObjectResult(res);
-
+            return sb.ToString();
         }
     }
 }
