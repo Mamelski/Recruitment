@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Recruitment.Contracts;
 
@@ -15,9 +14,9 @@ namespace Recruitment.Functions
     public static class HashCalculator
     {
         [FunctionName("HashCalculator")]
-        public static async Task<IActionResult> RunAsync(
+        public static async Task<IActionResult> CalculateHash(
             [HttpTrigger(AuthorizationLevel.Function, "post")]
-            HttpRequest request, ILogger log)
+            HttpRequest request)
         {
             var credentials = await ParseInputCredentials(request);
 
