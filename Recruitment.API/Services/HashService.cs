@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Recruitment.API.Options;
 using Recruitment.Contracts;
 
@@ -8,16 +9,23 @@ namespace Recruitment.API.Services
 {
     public class HashService : IHashService
     {
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
+        private readonly IHashCalculatorOptions _hashCalculatorOptions;
 
-        public HashService(HttpClient httpClient)
+        public HashService(HttpClient httpClient, IHashCalculatorOptions hashCalculatorOptions)
         {
             _httpClient = httpClient;
+            _hashCalculatorOptions = hashCalculatorOptions;
         }
         
-        public Task<string> GetHash(Credentials credentials)
+        public async Task<string> GetHash(Credentials credentials)
         {
-            throw new System.NotImplementedException();
+            var jsonCredentials = JsonConvert.SerializeObject(credentials);
+            var data = new StringContent(jsonCredentials, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(_hashCalculatorOptions.CalculateHashUri, data);
+            var result = response.Content.ReadAsStringAsync().Result;
+            return result;
         }
     }
 }
