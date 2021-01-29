@@ -12,4 +12,8 @@
       <Folder Include="Controllers" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Recruitment.Contracts\Recruitment.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>
