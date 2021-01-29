@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,8 +33,14 @@ namespace Recruitment.API
             services
                 .Configure<HashCalculatorOptions>(Configuration.GetSection(nameof(HashCalculatorOptions)))
                 .AddSingleton<IHashCalculatorOptions>(provider => provider.GetRequiredService<IOptions<HashCalculatorOptions>>().Value);
-            
-            services.AddTransient<IHashService, HashService>();
+
+            services
+                .AddTransient<IHashService, HashService>()
+                .AddHttpClient<IHashService, HashService>((provider, client) =>
+                {
+                    var options = provider.GetRequiredService<IHashCalculatorOptions>();
+                    client.BaseAddress = new Uri(options.BaseUrl);
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
