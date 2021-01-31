@@ -9,11 +9,13 @@
       <PackageReference Include="AutoFixture.Xunit2" Version="4.15.0" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
       <PackageReference Include="Moq" Version="4.16.0" />
+      <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
       <PackageReference Include="Shouldly" Version="4.0.3" />
       <PackageReference Include="xunit" Version="2.4.1" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Recruitment.API\Recruitment.API.csproj" />
       <ProjectReference Include="..\Recruitment.Functions\Recruitment.Functions.csproj" />
     </ItemGroup>
 
