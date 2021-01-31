@@ -24,6 +24,9 @@ namespace Recruitment.API.Services
             var data = new StringContent(jsonCredentials, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(_hashCalculatorOptions.CalculateHashUri, data);
+
+            response.EnsureSuccessStatusCode();
+            
             var result = response.Content.ReadAsStringAsync().Result;
             return result;
         }
