@@ -36,7 +36,6 @@ namespace Recruitment.API
                 .AddSingleton<IHashCalculatorOptions>(provider => provider.GetRequiredService<IOptions<HashCalculatorOptions>>().Value);
 
             services
-                .AddTransient<IHashService, HashService>()
                 .AddHttpClient<IHashService, HashService>((provider, client) =>
                 {
                     var options = provider.GetRequiredService<IHashCalculatorOptions>();
